@@ -1,0 +1,59 @@
+#include "stdio.h"
+
+#include "Emulator.h"
+#include "Instruction.h"
+
+Emulator::Emulator(uint32_t instMemSize, uint32_t dataMemSize) 
+    : instMemory(instMemSize), dataMemory(dataMemSize) {}
+
+void Emulator::init() {
+
+#define REGISTER(OP, INST) \
+    op2InstMap.insert( \
+        std::make_pair( \
+            OP, std::unique_ptr<INST>(new INST()) \
+        ) \
+    );
+#include "Instruction.def"
+
+    regFile.write(RegisterFile::SP, STACK_START);
+}
+
+void Emulator::load_instructions(const uint8_t *insn, size_t size) {
+    if (insn == nullptr) {
+        printf("Invalid size\n");
+        return;
+    }
+    if (size > instMemory.get_size()) {
+        printf("Invalid size\n");
+        return;
+    }
+    for (size_t i = 0; i < size; i++) {
+        instMemory.write(i, insn[i]);
+    }
+    regFile.write(RegisterFile::LR, size);
+    set_pc(0);
+}
+
+void Emulator::set_pc(uint32_t pc) {
+    this->pc = pc;
+}
+
+void Emulator::execute() {
+    uint32_t inst_end = regFile.read(RegisterFile::LR);
+    while (pc < inst_end) {
+        uint32_t insn = (instMemory.read(pc))           |
+                        (instMemory.read(pc + 1) << 8 ) |
+                        (instMemory.read(pc + 2) << 16) |
+                        (instMemory.read(pc + 3) << 24);
+        execute((insn >> 24) & 0x1f); 
+    }
+}
+
+void Emulator::execute(unsigned int opcode) {
+    if (op2InstMap.find(opcode) == op2InstMap.end()) {
+        printf("Invalid opcode\n");
+        return;
+    }
+    op2InstMap[opcode]->execute(regFile, instMemory, dataMemory, pc);
+}
