@@ -8,7 +8,10 @@ add_executable(emulator
 
 target_include_directories(emulator
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+          ${TOY_EMULATOR_DIR}/third-party/spdlog/include
 )
+
 target_link_libraries(emulator
   PRIVATE elf
+          spdlog::spdlog
 )
