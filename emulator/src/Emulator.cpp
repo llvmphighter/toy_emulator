@@ -19,20 +19,22 @@ void Emulator::init() {
     regFile.write(RegisterFile::SP, STACK_START);
 }
 
-void Emulator::load_instructions(const uint8_t *insn, size_t size) {
+absl::Status Emulator::load_instructions(const uint8_t *insn, size_t size) {
     if (insn == nullptr) {
         printf("Invalid size\n");
-        return;
+        return absl::UnknownError("Invalid size");
     }
     if (size > instMemory.get_size()) {
         printf("Invalid size\n");
-        return;
+        return absl::UnknownError("Invalid size");
     }
     for (size_t i = 0; i < size; i++) {
         instMemory.write(i, insn[i]);
     }
     regFile.write(RegisterFile::LR, size);
     set_pc(0);
+
+    return absl::OkStatus();
 }
 
 void Emulator::set_pc(uint32_t pc) {

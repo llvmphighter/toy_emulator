@@ -8,6 +8,8 @@
 #include "Memory.h"
 #include "RegisterFile.h"
 
+#include "absl/status/status.h"
+
 #define STACK_START   0x10000
 
 class Emulator {
@@ -15,7 +17,7 @@ class Emulator {
 public:
     Emulator(uint32_t instMemSize, uint32_t dataMemSize);
     void init();
-    void load_instructions(const uint8_t *insn, size_t size);
+    absl::Status load_instructions(const uint8_t *insn, size_t size);
     void set_pc(uint32_t pc);
     void execute();
     void execute(uint32_t opcode);
