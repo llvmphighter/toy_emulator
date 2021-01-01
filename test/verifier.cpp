@@ -32,7 +32,7 @@ TEST_F(InstructionTest, ADDriTest) {
     emu->execute();
 
     /* 3. Check */
-    ASSERT_EQ(0x1, emu->regFile.read(RegisterFile::R1));
+    ASSERT_EQ(0x1, emu->getRegFile().read(RegisterFile::R1));
 }    
 
 int main(int argc, char **argv) {

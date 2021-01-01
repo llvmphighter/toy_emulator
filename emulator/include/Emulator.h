@@ -22,11 +22,12 @@ public:
     void execute();
     void execute(uint32_t opcode);
 
+    const RegisterFile &getRegFile() { return regFile; }
+    const Memory &getMemory() { return dataMemory; }
+private:
     RegisterFile regFile;
     Memory instMemory;
     Memory dataMemory;
-
-private:
     uint32_t pc;
     std::map<uint32_t, std::unique_ptr<Instruction>> op2InstMap;
 };

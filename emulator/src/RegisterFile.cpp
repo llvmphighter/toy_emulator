@@ -1,7 +1,7 @@
 #include "stdio.h"
 #include "RegisterFile.h"
 
-void RegisterFile::dump(uint32_t index) {
+void RegisterFile::dump(uint32_t index) const {
     switch (index)
     {
     case R0: printf("R0: %d\n", regs[index]); break;
@@ -22,7 +22,7 @@ void RegisterFile::write(uint32_t index, uint32_t value) {
     regs[index] = value;                                                                      
 }                                                                                             
                                                                                               
-uint32_t RegisterFile::read(uint32_t index) {                                              
+uint32_t RegisterFile::read(uint32_t index) const {
     if (index >= REG_NUM)                                                                     
         printf("Invalid read\n");
     return regs[index];                                                                       
