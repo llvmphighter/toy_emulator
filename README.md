@@ -20,14 +20,6 @@ $ sudo apt install build-essential
 ``` shell
 $ sudo apt-get install libelf-dev
 ```
-* Google C++ Testing Framework
-```shell
-$ sudo apt-get install libgtest-dev
-$ cd /usr/src/gtest
-$ sudo cmake CMakeLists.txt
-$ sudo make
-$ sudo cp *.a /usr/lib
-``` 
 ## Build
 ```shell
 $ mkdir <path-to-build-directory> && cd <path-to-build-directory>
