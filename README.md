@@ -1,4 +1,5 @@
 # TOY_Emulator
+[![Build Status](https://travis-ci.org/llvmphighter/TOY_Emulator.svg?branch=main)](https://travis-ci.org/llvmphighter/TOY_Emulator)
 
 This repository contains an experimental CPU **TOY**.
 
