@@ -35,6 +35,28 @@ TEST_F(InstructionTest, ADDriTest) {
     ASSERT_EQ(0x1, emu->getRegFile().read(RegisterFile::R1));
 }    
 
+// dstReg = SUBri srcReg, imm
+TEST_F(InstructionTest, SUBriTest) {
+    /* 1. Build */
+    uint32_t instSize = 4;
+    uint8_t  inst[instSize];
+
+    uint32_t subri = (0x1) |                    // imm
+                     (RegisterFile::R0 << 16) | // srcReg
+                     (RegisterFile::R1 << 20) | // dstReg
+                     (0b00011 << 24);           // opcode
+    for (uint32_t i = 0; i < instSize; i++) {
+        inst[i] = (subri >> (i * 8)) & 0xff;
+    }
+    emu->load_instructions(inst, instSize);
+
+    /* 2. Operate */
+    emu->execute();
+
+    /* 3. Check */
+    ASSERT_EQ(0xffffffff, emu->getRegFile().read(RegisterFile::R1));
+}
+
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
