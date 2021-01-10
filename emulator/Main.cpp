@@ -10,14 +10,18 @@
 
 int main(int argc, char **argv)
 {
-    if (argc != 2) {
-        printf("Usage: ./emulator [executable_name]\n");
+    if (argc != 3) {
+        printf("Usage: ./emulator [executable_name] [memory_dump_filename]\n");
         return 1;
     }
-
     const char *elf_file = argv[1];
     if (elf_file == NULL) {
         printf("Missing ELF file\n");
+        return 1;
+    }
+    const char *memory_dump_file= argv[2];
+    if (memory_dump_file == NULL) {
+        printf("Missing memory dump file\n");
         return 1;
     }
 
@@ -32,7 +36,7 @@ int main(int argc, char **argv)
     Elf_Scn *scn = NULL;
     GElf_Shdr shdr;
 
-    Emulator emu(0x20000, 0x20000);
+    Emulator emu(0x20000, 0x20000, memory_dump_file);
     emu.init();
 
     /* load .text section */

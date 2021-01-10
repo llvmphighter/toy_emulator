@@ -3,8 +3,8 @@
 #include "Emulator.h"
 #include "Instruction.h"
 
-Emulator::Emulator(uint32_t instMemSize, uint32_t dataMemSize) 
-    : instMemory(instMemSize), dataMemory(dataMemSize) {}
+Emulator::Emulator(uint32_t instMemSize, uint32_t dataMemSize, const char *memoryDumpFile)
+    : instMemory(instMemSize), dataMemory(dataMemSize), memoryDumpFile(memoryDumpFile) {}
 
 void Emulator::init() {
 
@@ -50,6 +50,7 @@ void Emulator::execute() {
                         (instMemory.read(pc + 3) << 24);
         execute((insn >> 24) & 0x1f); 
     }
+    dataMemory.dump(memoryDumpFile);
 }
 
 void Emulator::execute(unsigned int opcode) {

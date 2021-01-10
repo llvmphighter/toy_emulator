@@ -15,7 +15,8 @@
 class Emulator {
 
 public:
-    Emulator(uint32_t instMemSize, uint32_t dataMemSize);
+    Emulator(uint32_t instMemSize, uint32_t dataMemSize,
+             const char *memoryDumpFile);
     void init();
     absl::Status load_instructions(const uint8_t *insn, size_t size);
     void set_pc(uint32_t pc);
@@ -28,6 +29,7 @@ private:
     RegisterFile regFile;
     Memory instMemory;
     Memory dataMemory;
+    const char *memoryDumpFile;
     uint32_t pc;
     std::map<uint32_t, std::unique_ptr<Instruction>> op2InstMap;
 };

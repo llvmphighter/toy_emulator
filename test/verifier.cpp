@@ -7,7 +7,7 @@
 class InstructionTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        emu = std::unique_ptr<Emulator>(new Emulator(0x20000, 0x20000));
+        emu = std::unique_ptr<Emulator>(new Emulator(0x20000, 0x20000, "memory.bin"));
         emu->init();
     }
     std::unique_ptr<Emulator> emu;
