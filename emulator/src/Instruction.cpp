@@ -119,3 +119,81 @@ void MOVi::execute(RegisterFile &regFile,
     printf("==============\n");
     pc += 4;
 }
+
+void BR::execute(RegisterFile &regFile,
+                 Memory &instMem,
+                 Memory &dataMem,
+                 uint32_t &pc) {
+    printf("BR\n");
+    uint32_t insn = get_insn(instMem, pc);
+    uint32_t addr = insn & 0xffff;
+    pc += addr;
+    printf("==============\n");
+}
+
+void BRCC::execute(RegisterFile &regFile,
+                   Memory &instMem,
+                   Memory &dataMem,
+                   uint32_t &pc) {
+    printf("BRCC\n");
+    uint32_t insn = get_insn(instMem, pc);
+    uint32_t pred = RegisterFile::PRED;
+    uint32_t addr = insn & 0xffff;
+    uint32_t cc = regFile.read(pred);
+    if (cc == 1) {
+        printf("Predicate register is true\n");
+        pc += addr;
+    } else {
+        printf("Predicate register is false\n");
+        pc += 4;
+    }
+    printf("==============\n");
+}
+
+void CMPLT::execute(RegisterFile &regFile,
+                   Memory &instMem,
+                   Memory &dataMem,
+                   uint32_t &pc) {
+    printf("CMPLT\n");
+    uint32_t insn = get_insn(instMem, pc);
+    uint32_t src1 = insn & 0xf;
+    uint32_t src2 = (insn >> 4) & 0xf;
+    uint32_t pred = RegisterFile::PRED;
+    int32_t val1 = regFile.read(src1);
+    int32_t val2 = regFile.read(src2);
+    printf("src1 is ");
+    regFile.dump(src1);
+    printf("src2 is ");
+    regFile.dump(src2);
+    if (val1 < val2) {
+        regFile.write(pred, 1);
+    } else {
+        regFile.write(pred, 0);
+    }
+    printf("==============\n");
+    pc += 4;
+}
+
+void CMPGT::execute(RegisterFile &regFile,
+                   Memory &instMem,
+                   Memory &dataMem,
+                   uint32_t &pc) {
+    printf("CMPGT\n");
+    uint32_t insn = get_insn(instMem, pc);
+    uint32_t src1 = insn & 0xf;
+    uint32_t src2 = (insn >> 4) & 0xf;
+    uint32_t pred = RegisterFile::PRED;
+    int32_t val1 = regFile.read(src1);
+    int32_t val2 = regFile.read(src2);
+    printf("src1 is ");
+    regFile.dump(src1);
+    printf("src2 is ");
+    regFile.dump(src2);
+    if (val1 > val2) {
+        regFile.write(pred, 1);
+    } else {
+        regFile.write(pred, 0);
+    }
+    printf("==============\n");
+    pc += 4;
+}

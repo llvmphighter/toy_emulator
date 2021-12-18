@@ -16,6 +16,7 @@ public:
         SP,
         LR,
         TMP,
+        PRED,
         REG_NUM
     };
 

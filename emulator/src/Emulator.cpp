@@ -15,6 +15,7 @@ void Emulator::init() {
         ) \
     );
 #include "Instruction.def"
+#undef REGISTER
 
     regFile.write(RegisterFile::SP, STACK_START);
 }
