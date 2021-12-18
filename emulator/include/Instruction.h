@@ -7,6 +7,7 @@
 class Instruction {
 public:
     Instruction() = default;
+    virtual ~Instruction() {}
     virtual void execute(RegisterFile &regFile,
                          Memory &instMem,
                          Memory &dataMem,
