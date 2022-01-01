@@ -43,14 +43,17 @@ void Emulator::set_pc(uint32_t pc) {
 }
 
 void Emulator::execute() {
-    uint32_t inst_end = regFile.read(RegisterFile::LR);
-    while (pc < inst_end) {
+    unsigned int exeCount = 0;
+    uint32_t instEnd = regFile.read(RegisterFile::LR);
+    while (pc < instEnd) {
         uint32_t insn = (instMemory.read(pc))           |
                         (instMemory.read(pc + 1) << 8 ) |
                         (instMemory.read(pc + 2) << 16) |
                         (instMemory.read(pc + 3) << 24);
-        execute((insn >> 24) & 0x1f); 
+        execute((insn >> 24) & 0x1f);
+        exeCount++;
     }
+    printf("Execution count: %d\n", exeCount);
     dataMemory.dump(memoryDumpFile);
 }
 
