@@ -112,7 +112,7 @@ void MOVi::execute(RegisterFile &regFile,
     printf("MOVi\n");
     uint32_t insn = get_insn(instMem, pc);
     uint32_t rd = (insn >> 20) & 0xf;
-    uint32_t imms = insn & 0xffff;
+    uint32_t imms = (int32_t((insn & 0xffff) << 16)) >> 16; // do sign extension;
     printf("imm: %d\n", imms);
     regFile.write(rd, imms);
     regFile.dump(rd);
@@ -166,6 +166,30 @@ void CMPLT::execute(RegisterFile &regFile,
     printf("src2 is ");
     regFile.dump(src2);
     if (val1 < val2) {
+        regFile.write(pred, 1);
+    } else {
+        regFile.write(pred, 0);
+    }
+    printf("==============\n");
+    pc += 4;
+}
+
+void CMPLE::execute(RegisterFile &regFile,
+                   Memory &instMem,
+                   Memory &dataMem,
+                   uint32_t &pc) {
+    printf("CMPLE\n");
+    uint32_t insn = get_insn(instMem, pc);
+    uint32_t src1 = insn & 0xf;
+    uint32_t src2 = (insn >> 4) & 0xf;
+    uint32_t pred = RegisterFile::PRED;
+    int32_t val1 = regFile.read(src1);
+    int32_t val2 = regFile.read(src2);
+    printf("src1 is ");
+    regFile.dump(src1);
+    printf("src2 is ");
+    regFile.dump(src2);
+    if (val1 <= val2) {
         regFile.write(pred, 1);
     } else {
         regFile.write(pred, 0);
